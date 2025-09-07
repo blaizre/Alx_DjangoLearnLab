@@ -1,3 +1,4 @@
+```python
 from bookshelf.models import Book
 
 book = Book.objects.create(
@@ -7,3 +8,4 @@ book = Book.objects.create(
 )
 
 print(book)
+```
