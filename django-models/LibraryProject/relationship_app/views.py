@@ -7,10 +7,8 @@ from .models import Book
 # Create your views here.
 #Function-based view.
 def list_books(request):
-    books = Book.objects.select_related('author').all()
-    lines = [f"{book.title} by {book.author.name}" for book in books]
-    response_text = "\n".join(lines) if lines else "No books available."
-    return HttpResponse(response_text, content_type="text/plain")
+    books = Book.objects.all()
+    return render(request, 'relationship_app/list_books.html', {'books': books})
 
 
 #Class-based view.
