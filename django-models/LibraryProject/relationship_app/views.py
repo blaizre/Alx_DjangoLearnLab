@@ -28,11 +28,11 @@ class LibraryDetailView(DetailView):
     template_name = 'relationship_app/library_detail.html'
 
 #Login.
-class CustomLoginView(LoginView):
+class LoginView(LoginView):
     template_name = 'relationship_app/login.html'
 
 #Logout.
-class CustomLogoutView(LogoutView):
+class LogoutView(LogoutView):
     template_name = 'relationship_app/logout.html'
 
 #Register.
