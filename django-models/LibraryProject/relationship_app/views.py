@@ -1,6 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic.detail import DetailView
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, logout
+from django.contrib.auth.views import LoginView, LogoutView
 from .models import Library
 from .models import Book
 
@@ -22,3 +27,21 @@ class LibraryDetailView(DetailView):
     model = Library
     template_name = 'relationship_app/library_detail.html'
 
+#Login.
+class CustomLoginView(LoginView):
+    template_name = 'relationship_app/login.html'
+
+#Logout.
+class CustomLogoutView(LogoutView):
+    template_name = 'relationship_app/logout.html'
+
+#Register.
+class RegisterView(CreateView):
+    form_class = UserCreationForm
+    template_name = 'relationship_app/register.html'
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user) #Login after registration.
+        return super().form_valid(form)
