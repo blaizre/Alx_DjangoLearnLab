@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Book</title>
+</head>
+<body>
+    <h1>Delete Book</h1>
+
+    {% if perms.bookshelf.can_delete %}
+        <p>Are you sure you want to delete "{{ book.title }}" by {{ book.author }}?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit">Yes, delete</button>
+        </form>
+        <a href="{% url 'list_books' %}">Cancel</a>
+    {% else %}
+        <p>You don’t have permission to delete books.</p>
+    {% endif %}
+</body>
+</html>
