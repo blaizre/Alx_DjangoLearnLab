@@ -2,22 +2,27 @@ from django import forms
 from .models import Book
 
 class BookForm(forms.ModelForm):
+    """Form for creating and editing books securely."""
     class Meta:
         model = Book
-        fields = ['title', 'author']
-        widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter book title'}),
-            'author': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter author name'}),
-        }
-        labels = {
-            'title': 'Book Title',
-            'author': 'Author',
-        }
+        fields = ["title", "author"]
 
-    # Optional: extra validation example
-    def clean_title(self):
-        title = self.cleaned_data['title']
-        if len(title) < 2:
-            raise forms.ValidationError("Title must be at least 2 characters long.")
-        return title
+class ExampleForm(forms.Form):
+    """
+    Example form to demonstrate CSRF protection and safe input handling.
+    This can be used in a test template (form_example.html).
+    """
+    name = forms.CharField(
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(attrs={"placeholder": "Enter your name"})
+    )
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={"placeholder": "Enter your email"})
+    )
+    message = forms.CharField(
+        widget=forms.Textarea(attrs={"placeholder": "Your message"}),
+        required=False
+    )
 

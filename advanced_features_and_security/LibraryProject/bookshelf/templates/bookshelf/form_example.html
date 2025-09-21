@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Example Form</title>
+</head>
+<body>
+    <h1>Example Form (CSRF Demo)</h1>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- Display non-field errors (general form errors) -->
+        {% if form.non_field_errors %}
+            <div style="color: red;">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <p>
+            {{ form.name.label_tag }}<br>
+            {{ form.name }}
+            {% if form.name.errors %}
+                <span style="color: red;">{{ form.name.errors|join:", " }}</span>
+            {% endif %}
+        </p>
+
+        <p>
+            {{ form.email.label_tag }}<br>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <span style="color: red;">{{ form.email.errors|join:", " }}</span>
+            {% endif %}
+        </p>
+
+        <p>
+            {{ form.message.label_tag }}<br>
+            {{ form.message }}
+            {% if form.message.errors %}
+                <span style="color: red;">{{ form.message.errors|join:", " }}</span>
+            {% endif %}
+        </p>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
+
