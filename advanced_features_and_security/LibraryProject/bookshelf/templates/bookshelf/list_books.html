@@ -7,11 +7,9 @@
 <body>
     <h1>Book List</h1>
 
-    <nav>
-        {% if perms.bookshelf.can_create %}
-            <a href="{% url 'add_book' %}">Add Book</a>
-        {% endif %}
-    </nav>
+    {% if perms.bookshelf.can_create %}
+        <p><a href="{% url 'add_book' %}">Add Book</a></p>
+    {% endif %}
 
     <ul>
         {% for book in books %}
@@ -19,11 +17,11 @@
                 {{ book.title }} by {{ book.author }}
 
                 {% if perms.bookshelf.can_edit %}
-                    <a href="{% url 'edit_book' book.pk %}">Edit</a>
+                    | <a href="{% url 'edit_book' book.pk %}">Edit</a>
                 {% endif %}
 
                 {% if perms.bookshelf.can_delete %}
-                    <a href="{% url 'delete_book' book.pk %}">Delete</a>
+                    | <a href="{% url 'delete_book' book.pk %}">Delete</a>
                 {% endif %}
             </li>
         {% empty %}

@@ -8,20 +8,16 @@
     <h1>Edit Book</h1>
 
     {% if perms.bookshelf.can_edit %}
-        <form method="post" action="{% url 'edit_book' book.pk %}">
+        <form method="post">
             {% csrf_token %}
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" value="{{ book.title }}" required><br>
-
-            <label for="author">Author:</label>
-            <input type="text" id="author" name="author" value="{{ book.author }}" required><br>
-
+            {{ form.as_p }}
             <button type="submit">Save Changes</button>
         </form>
-        <a href="{% url 'list_books' %}">Cancel</a>
     {% else %}
         <p>You don’t have permission to edit books.</p>
     {% endif %}
+
+    <p><a href="{% url 'list_books' %}">Back to Book List</a></p>
 </body>
 </html>
 
