@@ -17,11 +17,11 @@ def add_book(request):
         title = request.POST.get("title")
         author = request.POST.get("author")
         Book.objects.create(title=title,  author=author)
-        return redirect("book_list")
+        return redirect("list_book")
     return render(request, "bookshelf/add_book.html")
 
 #Only users with 'can_edit' permission can edit books.
-@permisssion_required("bookshelf.can_edit", raise_excpetion=True)
+@permisssion_required("bookshelf.can_edit", raise_exception=True)
 def edit_book(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     if request.method == "POST":
@@ -40,3 +40,8 @@ def delete_book(request, book_id):
         return redirect("list_books")
     return render(requset, "bookshelf/delete_book.html", {"book": book})
 
+#List books
+@permission_required('bookshelf.can_view', raise_exception=True)
+def book_list(request):
+    books = Book.objects.all()
+    return render(request, 'bookshelf/list_books.html', {'books': books})
