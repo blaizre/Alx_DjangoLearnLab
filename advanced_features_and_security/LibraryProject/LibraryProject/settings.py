@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,14 +21,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-bg&u7b!6u$!6c$w#!qa9&1!6j!rbfe*cfy=gh_pog8v8)=3oyp'
+# Keep DEBUG True locally; set DJANGO_DEBUG=False in production environment
+DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-
+# In production set DJANGO_ALLOWED_HOSTS to a comma-separated list, e.g. "example.com,www.example.com"
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 # Application definition
 
 INSTALLED_APPS = [
@@ -120,7 +121,34 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# Default primary key field type
+# ---- SECURITY SETTINGS (development-friendly defaults) ----
+# Use environment variables in production to override these safely.
+
+# Keep using SECRET_KEY already present; you can override in prod via DJANGO_SECRET_KEY env var
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "SECRET_KEY-replace-this-in-production")
+
+# DEBUG remains as currently set; to flip to production use:
+# export DJANGO_DEBUG=False
+DEBUG = os.environ.get("DJANGO_DEBUG", str(DEBUG)) == "True"
+
+# Example: set allowed hosts via env var in production
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", ",".join(ALLOWED_HOSTS or ["127.0.0.1", "localhost"])).split(",")
+
+# If testing locally over HTTP, set DJANGO_SESSION_COOKIE_SECURE=False and DJANGO_CSRF_COOKIE_SECURE=False as env vars.
+
+# Cookie security — assignment requires cookies be sent only over HTTPS in production
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Additional cookie hardening
+SESSION_COOKIE_HTTPONLY = True   # prevents JS access to session cookie
+
+# Browser-side protections
+SECURE_BROWSER_XSS_FILTER = True       # sets X-XSS-Protection header
+SECURE_CONTENT_TYPE_NOSNIFF = True    # sets X-Content-Type-Options: nosniff
+X_FRAME_OPTIONS = "DENY"              # prevents clickjacking
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

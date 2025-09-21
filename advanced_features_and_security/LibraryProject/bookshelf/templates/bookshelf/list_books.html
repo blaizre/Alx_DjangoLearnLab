@@ -7,9 +7,11 @@
 <body>
     <h1>Book List</h1>
 
-    {% if perms.bookshelf.can_create %}
-        <a href="{% url 'add_book' %}">Add Book</a>
-    {% endif %}
+    <nav>
+        {% if perms.bookshelf.can_create %}
+            <a href="{% url 'add_book' %}">Add Book</a>
+        {% endif %}
+    </nav>
 
     <ul>
         {% for book in books %}
@@ -30,3 +32,4 @@
     </ul>
 </body>
 </html>
+
