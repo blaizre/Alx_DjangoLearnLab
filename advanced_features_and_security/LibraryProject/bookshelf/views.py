@@ -17,7 +17,7 @@ def add_book(request):
         title = request.POST.get("title")
         author = request.POST.get("author")
         Book.objects.create(title=title,  author=author)
-        return redirect("list_books")
+        return redirect("book_list")
     return render(request, "bookshelf/add_book.html")
 
 #Only users with 'can_edit' permission can edit books.
@@ -39,10 +39,4 @@ def delete_book(request, book_id):
         book.delete()
         return redirect("list_books")
     return render(requset, "bookshelf/delete_book.html", {"book": book})
-
-#Function-based view.
-def list_books(request):
-    books = Book.objects.all()
-    return render(request, 'relationship_app/list_books.html', {'books': books})
-
 
