@@ -153,3 +153,11 @@ SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+#Redirect all HTTP req to HTTPS
+SECURE_SSL_REDIRECT = True
+
+#HTTP Strict Transport Security(HSTS)
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
