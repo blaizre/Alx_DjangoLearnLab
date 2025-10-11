@@ -130,3 +130,132 @@ The `CustomUser` model is the core of the user system and includes the following
 *   `profile_picture`: An image field for the user's profile picture.
 *   `followers`: A many-to-many relationship allowing users to follow each other.
 
+
+## Posts and Comments API
+
+This section details the endpoints for creating, viewing, updating, and deleting posts and comments.
+
+**Authentication**: For endpoints that require authentication, you must include the `Authorization` header with your token:
+`Authorization: Token your_auth_token_string`
+
+**Pagination**: List endpoints are paginated. You can navigate pages using the `?page=` query parameter (e.g., `/api/posts/?page=2`).
+
+### Posts
+
+#### List Posts
+
+*   **Endpoint:** `GET /api/posts/`
+*   **Description:** Retrieves a paginated list of all posts.
+*   **Authentication:** Not required.
+*   **Query Parameters:**
+    *   `?search=<term>`: Filter posts by searching for a term in the title or content.
+*   **Success Response (200 OK):**
+    ```json
+    {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+            {
+                "id": 1,
+                "author": "someuser",
+                "title": "My First Post",
+                "content": "This is the content of my first post.",
+                "created_at": "2025-10-11T12:00:00Z",
+                "updated_at": "2025-10-11T12:00:00Z",
+                "comments": []
+            }
+        ]
+    }
+    ```
+
+#### Create a Post
+
+*   **Endpoint:** `POST /api/posts/`
+*   **Description:** Creates a new post.
+*   **Authentication:** **Required**.
+*   **Request Body:**
+    ```json
+    {
+        "title": "A New Post",
+        "content": "Some interesting content."
+    }
+    ```
+*   **Success Response (201 CREATED):**
+    ```json
+    {
+        "id": 2,
+        "author": "currentuser",
+        "title": "A New Post",
+        "content": "Some interesting content.",
+        "created_at": "2025-10-11T12:05:00Z",
+        "updated_at": "2025-10-11T12:05:00Z",
+        "comments": []
+    }
+    ```
+
+#### Retrieve a Post
+
+*   **Endpoint:** `GET /api/posts/{id}/`
+*   **Description:** Retrieves a single post by its ID, including all its comments.
+*   **Authentication:** Not required.
+
+#### Update a Post
+
+*   **Endpoint:** `PUT /api/posts/{id}/` or `PATCH /api/posts/{id}/`
+*   **Description:** Updates a post. Only the author of the post can perform this action.
+*   **Authentication:** **Required** (as post owner).
+
+#### Delete a Post
+
+*   **Endpoint:** `DELETE /api/posts/{id}/`
+*   **Description:** Deletes a post. Only the author of the post can perform this action.
+*   **Authentication:** **Required** (as post owner).
+*   **Success Response:** `204 No Content`
+
+---
+
+### Comments
+
+Comments are nested under posts.
+
+#### List Comments for a Post
+
+*   **Endpoint:** `GET /api/posts/{post_id}/comments/`
+*   **Description:** Retrieves a paginated list of all comments for a specific post.
+*   **Authentication:** Not required.
+
+#### Create a Comment
+
+*   **Endpoint:** `POST /api/posts/{post_id}/comments/`
+*   **Description:** Creates a new comment on a specific post.
+*   **Authentication:** **Required**.
+*   **Request Body:**
+    ```json
+    {
+        "content": "This is a great post!"
+    }
+    ```
+*   **Success Response (201 CREATED):**
+    ```json
+    {
+        "id": 1,
+        "author": "currentuser",
+        "post": 1,
+        "content": "This is a great post!",
+        "created_at": "2025-10-11T12:10:00Z",
+        "updated_at": "2025-10-11T12:10:00Z"
+    }
+    ```
+
+#### Retrieve, Update, or Delete a Single Comment
+
+*   **Endpoint:**
+    *   `GET /api/posts/{post_id}/comments/{id}/` (Retrieve)
+    *   `PUT /api/posts/{post_id}/comments/{id}/` (Update)
+    *   `DELETE /api/posts/{post_id}/comments/{id}/` (Delete)
+*   **Description:** Manages a single comment.
+*   **Authentication:**
+    *   `GET`: Not required.
+    *   `PUT`, `DELETE`: **Required** (as comment owner).
+
